@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Articles{% endblock title %}
+
+{% block content %}
+    {% for article in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">{{ article.title }}</span> &middot;
+                <span class="text-muted">by {{ article.author }} | {{ article.date }}</span>
+            </div>
+            <div class="card-body">
+                {{ article.body }}<br>
+                {% if user.username == article.author %}
+                <a href="{% url 'article_edit' article.pk %}">Edit</a> | <a href="{% url 'article_delete' article.pk %}">Delete</a>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                {% for comment in article.comments.all %}
+                    <p>
+                        <b>{{comment.author}} &middot; </b>
+                        {{comment}}
+                    </p>
+                {% endfor %}
+                <a href="{% url 'comment_new' article.pk %}" class="btn" >Comment</a>
+            </div>
+        </div>
+        <br/>
+    {% endfor %}
+{% endblock content %}
